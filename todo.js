@@ -1,7 +1,8 @@
+// Import Redux Toolkit utilities
 import { configureStore, createSlice, nanoid } from "@reduxjs/toolkit";
 
 const STORAGE_KEY = "redux-todo-items";
-
+// Load todos from localStorage when the app starts
 function loadTodos() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -20,7 +21,7 @@ function saveTodos(todos) {
     // Ignore write errors (storage full, privacy mode, etc.)
   }
 }
-
+// Create a Redux slice (state + reducers combined)
 const slice = createSlice({
   name: "todos",
   initialState: loadTodos(),
@@ -36,17 +37,17 @@ const slice = createSlice({
     remove: (state, action) => state.filter(x => x.id !== action.payload)
   }
 });
-
+// Create the Redux store
 const store = configureStore({
   reducer: { todos: slice.reducer }
 });
-
+// Extract action creators from the slice
 const { add, toggle, remove } = slice.actions;
 
 const listEl = document.getElementById("list");
 const inputEl = document.getElementById("input");
 const formEl = document.getElementById("form");
-
+// Render function: updates the UI based on current state
 function render() {
   listEl.innerHTML = "";
   for (const todo of store.getState().todos) {
@@ -72,9 +73,11 @@ function render() {
     listEl.appendChild(li);
   }
 }
-
+// Initial render
 render();
+// Re-render whenever state changes
 store.subscribe(render);
+// Save to localStorage whenever state changes
 store.subscribe(() => {
   saveTodos(store.getState().todos);
 });
@@ -87,5 +90,5 @@ formEl.addEventListener("submit", (e) => {
   inputEl.value = "";
   inputEl.focus();
 });
-
+// Expose store to browser console (for debugging)
 window.store = store;
