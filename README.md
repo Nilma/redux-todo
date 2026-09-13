@@ -19,3 +19,4 @@ A small todo app built with Redux Toolkit via CDN. It stores todos in localStora
 
 - localStorage is used to save todos under the key "redux-todo-items".
 - If you open the HTML file with file://, some browsers may limit localStorage. Use Live Server instead.
+- try to create a small DB to save the data to it.
